@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify, request
-from src.helper import download_hugging_face_embeddings
+# from src.helper import download_hugging_face_embeddings
 from langchain_pinecone import PineconeVectorStore
 from langchain_openai import ChatOpenAI
 from langchain.chains import create_retrieval_chain
@@ -24,9 +24,17 @@ os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY or ""
 os.environ["OPENAI_PROJECT_ID"] = OPENAI_PROJECT_ID or ""
 
 
-embeddings = download_hugging_face_embeddings()
+# embeddings = download_hugging_face_embeddings()
 
-index_name = "medical-chatbot" 
+from langchain_openai import OpenAIEmbeddings
+...
+embeddings = OpenAIEmbeddings(
+    model="text-embedding-3-small",   # ya text-embedding-3-large if needed
+    api_key=os.getenv("MY_OPENAI_API_KEY")
+)
+
+
+index_name = "medical-chatbot"
 # Embed each chunk and upsert the embeddings into your Pinecone index.
 docsearch = PineconeVectorStore.from_existing_index(
     index_name=index_name,
